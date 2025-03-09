@@ -55,10 +55,11 @@ pub fn term_to_val(param_term: &Term, param_type: &Type) -> Result<Val, Error> {
         (TermType::Atom, Type::Bool) => Ok(Val::Bool(param_term.decode::<bool>()?)),
         (TermType::List, Type::List(list)) => {
             let decoded_list = param_term.decode::<Vec<Term>>()?;
-            let list_values = decoded_list
-                .iter()
-                .map(|term| term_to_val(term, &list.ty()).unwrap())
-                .collect::<Vec<Val>>();
+            let mut list_values = Vec::with_capacity(decoded_list.len());
+            for term in decoded_list {
+                let val = term_to_val(&term, &list.ty())?;
+                list_values.push(val);
+            }
             Ok(Val::List(list_values))
         }
         (TermType::Tuple, Type::Tuple(tuple)) => {
@@ -403,6 +404,30 @@ fn convert_complex_result(
                 tuple_vals.push(component_val);
             }
             Ok(Val::Tuple(tuple_vals))
+        }
+        TypeDefKind::Result(result_type) => {
+            let decoded_tuple = tuple::get_tuple(result_term)?;
+            let first_term = decoded_tuple
+                .first()
+                .ok_or(Error::Term(Box::new("Invalid tuple")))?;
+            let second_term = decoded_tuple
+                .get(1)
+                .ok_or(Error::Term(Box::new("Invalid tuple")))?;
+
+            let the_atom = first_term.atom_to_string()?;
+            if the_atom == "ok" {
+                if let Some(ok_type) = result_type.ok {
+                    let ok_val = convert_result_term(*second_term, &ok_type, wit_resolver)?;
+                    Ok(Val::Result(Ok(Some(Box::new(ok_val)))))
+                } else {
+                    Ok(Val::Result(Ok(None)))
+                }
+            } else if let Some(err_type) = result_type.err {
+                let err_val = convert_result_term(*second_term, &err_type, wit_resolver)?;
+                Ok(Val::Result(Err(Some(Box::new(err_val)))))
+            } else {
+                Ok(Val::Result(Err(None)))
+            }
         }
         _ => Err(Error::Term(Box::new("Unsupported type conversion"))),
     }
