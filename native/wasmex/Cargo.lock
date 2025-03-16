@@ -1510,7 +1510,7 @@ dependencies = [
 [[package]]
 name = "rustler"
 version = "0.36.1"
-source = "git+https://github.com/filmor/rustler.git?branch=static#a9087291098e766a8034e6bdb192f9e8d89c8c8b"
+source = "git+https://github.com/filmor/rustler.git?rev=cffa18a7fbad85de41a688839b31bce2253ed1d4#cffa18a7fbad85de41a688839b31bce2253ed1d4"
 dependencies = [
  "inventory",
  "libloading",
@@ -1523,7 +1523,7 @@ dependencies = [
 [[package]]
 name = "rustler_codegen"
 version = "0.36.1"
-source = "git+https://github.com/filmor/rustler.git?branch=static#a9087291098e766a8034e6bdb192f9e8d89c8c8b"
+source = "git+https://github.com/filmor/rustler.git?rev=cffa18a7fbad85de41a688839b31bce2253ed1d4#cffa18a7fbad85de41a688839b31bce2253ed1d4"
 dependencies = [
  "heck",
  "inventory",
