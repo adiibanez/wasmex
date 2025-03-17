@@ -1,4 +1,3 @@
-#![no_std]
 #![no_main]
 pub mod atoms;
 pub mod caller;
