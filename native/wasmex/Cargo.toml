@@ -29,3 +29,6 @@ wiggle = "30.0.2"
 wat = "1.227.1"
 wit-parser = "0.227.1"
 convert_case = "0.8.0"
+
+[profile.release]
+panic = "abort"
