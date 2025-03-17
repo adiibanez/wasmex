@@ -12,8 +12,8 @@ edition = "2021"
 [lib]
 name = "wasmex"
 path = "src/lib.rs"
-# crate-type = ["dylib", "staticlib"]
-crate-type = ["staticlib"]
+crate-type = ["dylib", "staticlib"]
+# crate-type = ["staticlib"]
 
 [dependencies]
 # rustler = { version = "0.36.1", features = ["big_integer", "serde"] }
